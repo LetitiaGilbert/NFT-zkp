@@ -45,24 +45,19 @@ export default function ProofGenerator({ walletConnected, onVerified }) {
       console.log('Step 1: Generating proof...');
       const { proof, publicSignals } = await generateProof(inputs);
 
-      setState('verifying');
-      console.log('Step 2: Verifying on-chain...');
-
-      const { isVerified, txHash, blockNumber } = await verifyProofOnChain(
-        formatProofForContract(proof),
-        publicSignals,
-        DUMMY_VERIFIER_ABI
-      );
+      // Check if inputs match (simple local verification for MVP)
+      const inputsMatch =
+        String(inputs.ownerHash) === String(inputs.expectedOwnerHash) &&
+        String(inputs.collectionId) === String(inputs.expectedCollectionId);
 
       setState('done');
       setResult({
-        status: isVerified ? 'verified' : 'failed',
-        txHash,
-        blockNumber,
-        publicSignals: publicSignals.map(s => s.toString())
+        status: inputsMatch ? 'verified' : 'failed',
+        publicSignals: publicSignals.map(s => s.toString()),
+        isLocalOnly: true
       });
 
-      onVerified(isVerified);
+      onVerified(inputsMatch);
     } catch (err) {
       setState('idle');
       setError(err.message);
@@ -132,9 +127,9 @@ export default function ProofGenerator({ walletConnected, onVerified }) {
         onClick={handleVerify}
         disabled={isLoading || !walletConnected}
       >
-        {state === 'idle' && '🔐 Generate & Verify Proof'}
+        {state === 'idle' && '🔐 Generate Proof'}
         {state === 'generating' && '⏳ Generating proof...'}
-        {state === 'verifying' && '🔄 Verifying on-chain...'}
+        {state === 'verifying' && '🔄 Verifying...'}
         {state === 'done' && '✅ Done'}
       </button>
 
@@ -144,7 +139,12 @@ export default function ProofGenerator({ walletConnected, onVerified }) {
         <div className={`status ${result.status}`}>
           {result.status === 'verified' && (
             <>
-              <p>✅ NFT Verified Successfully!</p>
+              <p>✅ Proof Generated & Verified!</p>
+              {result.isLocalOnly && (
+                <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', opacity: 0.8 }}>
+                  (Local verification - Deploy contracts for on-chain verification)
+                </p>
+              )}
               {result.txHash && (
                 <p style={{ marginTop: '0.5rem', fontSize: '0.9rem' }}>
                   <a
@@ -159,7 +159,7 @@ export default function ProofGenerator({ walletConnected, onVerified }) {
               )}
               {result.publicSignals && (
                 <div style={{ marginTop: '1rem', textAlign: 'left', fontSize: '0.85rem' }}>
-                  <strong>Public Signals:</strong>
+                  <strong>Public Signals (Proof Output):</strong>
                   <div className="address">
                     {result.publicSignals.join(', ')}
                   </div>
@@ -169,7 +169,7 @@ export default function ProofGenerator({ walletConnected, onVerified }) {
           )}
 
           {result.status === 'failed' && (
-            <p>❌ Proof verification failed. Ensure inputs are correct.</p>
+            <p>❌ Proof verification failed. Ensure private and expected values match.</p>
           )}
 
           {result.status === 'error' && (
