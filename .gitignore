@@ -1,0 +1,6 @@
+build/
+*.zkey
+*.ptau
+*.wtns
+*.wasm
+node_modules/
