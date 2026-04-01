@@ -1,0 +1,6 @@
+{
+  "ownerHash": "123",
+  "expectedOwnerHash": "123",
+  "collectionId": "456",
+  "expectedCollectionId": "456"
+}

@@ -1,0 +1,6 @@
+1,1,0,main.pubOwnerHash
+2,2,0,main.pubCollectionId
+3,-1,0,main.ownerHash
+4,-1,0,main.expectedOwnerHash
+5,-1,0,main.collectionId
+6,-1,0,main.expectedCollectionId
