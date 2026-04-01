@@ -1,0 +1,17 @@
+{
+  "name": "nft-zkp-contracts",
+  "version": "1.0.0",
+  "description": "Solidity smart contracts for ZKP NFT verification",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.js",
+    "deploy:sepolia": "hardhat run scripts/deploy.js --network sepolia"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.7",
+    "ethers": "^6.9.0",
+    "hardhat": "^2.19.0"
+  }
+}

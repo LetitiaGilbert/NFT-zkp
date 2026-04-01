@@ -1,0 +1,11 @@
+# Placeholder - copy circuit artifacts from ../zkp/
+
+## Required files in this directory:
+# - circuit.wasm      (from Circom compilation)
+# - circuit_final.zkey (from Circom trusted setup)
+# - verification_key.json (from Circom)
+
+## To copy from zkp folder (after circuit compilation):
+# cp ../zkp/circuit_js/circuit.wasm .
+# cp ../zkp/circuit_final.zkey .
+# cp ../zkp/verification_key.json .
